@@ -1,0 +1,48 @@
+# Production Dockerfile for GitHub Reporter - Nosana Network Deployment
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Install curl for health checks and other utilities
+RUN apk add --no-cache curl bash
+
+# Copy package files
+COPY package.json pnpm-lock.yaml ./
+
+# Install pnpm
+RUN npm install -g pnpm
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy source code
+COPY . .
+
+# Build the application
+RUN pnpm run build
+
+# Create data directory for persistent storage
+RUN mkdir -p /app/data
+
+# Production environment variables
+ENV NODE_ENV=production
+ENV PORT=8080
+ENV HOST=0.0.0.0
+
+# Use production AI endpoint by default
+ENV API_BASE_URL=https://nos-dep-2.node.k8s.prd.nos.ci/qwen-3-8b-skea/api
+ENV MODEL_NAME_AT_ENDPOINT=qwen3:8b
+
+# Set database to use data directory
+ENV DATABASE_URL=file:./data/github-reporter.db
+
+# Expose port
+EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
+
+# Start the application
+CMD ["pnpm", "run", "start"]

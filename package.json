@@ -9,6 +9,8 @@
     "dev": "mastra dev",
     "build": "mastra build",
     "start": "mastra start",
+    "start:agent": "tsx src/cli.ts",
+    "serve-mcp": "npx mastra serve-mcp",
     "lint": "biome lint ./src",
     "format": "biome format ./src/** --write",
     "check": "biome check ./src"
@@ -36,6 +38,8 @@
     "@nosana/cli": "^1.0.52",
     "@types/node": "^24.0.3",
     "mastra": "^0.10.5",
+    "tsx": "^4.7.0",
     "typescript": "^5.8.3"
-  }
+  },
+  "packageManager": "pnpm@10.6.5+sha512.cdf928fca20832cd59ec53826492b7dc25dc524d4370b6b4adbf65803d32efaa6c1c88147c0ae4e8d579a6c9eec715757b50d4fa35eea179d868eada4ed043af"
 }

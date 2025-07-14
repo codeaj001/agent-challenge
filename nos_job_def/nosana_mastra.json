@@ -1,18 +1,22 @@
 {
   "ops": [
     {
-      "id": "agents",
+      "id": "github-reporter",
       "args": {
         "gpu": true,
-        "image": "docker.io/yourusername/agent-challenge:latest",
+        "image": "docker.io/codeaj001/github-reporter:latest",
         "expose": [
           {
             "port": 8080
           }
         ],
-        "entrypoint": [
-          "/bin/sh"
-        ]
+        "env": {
+          "NODE_ENV": "production",
+          "PORT": "8080",
+          "HOST": "0.0.0.0",
+          "API_BASE_URL": "https://nos-dep-2.node.k8s.prd.nos.ci/qwen-3-8b-skea/api",
+          "MODEL_NAME_AT_ENDPOINT": "qwen3:8b"
+        }
       },
       "type": "container/run"
     }
